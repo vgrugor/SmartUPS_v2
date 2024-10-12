@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Home Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="content">
+        <!-- Блок текущих настроек -->
+        <div class="row">
+            <div class="column-1">
+                <p class="card-title">Налаштування:</p>
+                <p id="status" class="state">
+                    <!-- Статус будет загружен через AJAX -->
+                </p>
+            </div>
+        </div>
+
+        <!-- Тогл для включения/выключения интернета -->
+        <div class="row">
+            <div class="column-1">
+                <p class="card-title">Інтернет</p>
+                <label class="switch">
+                    <input type="checkbox" id="toggleInternetPower">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <!-- Тогл для включения/выключения Telegram-бота -->
+        <div class="row">
+            <div class="column-1">
+                <p class="card-title">Освітлення</p>
+                <label class="switch">
+                    <input type="checkbox" id="toggleLightPower">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <!-- Установка текущего времени -->
+        <div class="row">
+            <div class="column-1">
+                <p class="card-title">Встановити час</p>
+                <!--<input type="time" id="timePicker">-->
+                <input type="number" id="hourInput" min="0" max="23" name="hour">
+                <input type="number" id="minuteInput" min="0" max="23" name="minute">
+                <button id="setTimeBtn">Зберегти</button>
+            </div>
+        </div>
+
+        <!-- Установка времени автоматического выключения/включения -->
+        <div class="row">
+            <div class="column-1">
+                <p class="card-title">Період вимкнення</p>
+                <p>
+                    <label for="startHourInput">Початок, г:</label>
+                    <input type="number" id="startHourInput" min="0" max="23">
+                </p>
+                <p>
+                    <label for="endHourInput">Закінчення, г:</label>
+                    <input type="number" id="endHourInput" min="0" max="23">
+                </p>
+                <p>
+                    <button id="setSettingsBtn">Зберегти</button>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
