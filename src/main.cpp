@@ -3,7 +3,7 @@
 
 Settings& settings = Settings::getInstance();
 WifiManager& wifiManager = WifiManager::getInstance();
-TaskManager& taskManager = TaskManager::getInstance();
+Scheduler& scheduler = Scheduler::getInstance();
 LittleFSModule littleFSModule;
 WebServer webServer(littleFSModule);
 OfflineClock offlineClock;
@@ -23,6 +23,6 @@ void loop() {
 	webServer.handleClient();
 	offlineClock.refresh();
 	wifiManager.handle();
-	taskManager.update();
+	scheduler.executeTasks();
 	changeUPSModeHandler.handle();
 }

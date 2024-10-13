@@ -4,5 +4,6 @@
 #include "FS/LittleFSModule.h"
 #include "OfflineClock/OfflineClock.h"
 #include "WiFi/WifiManager.h"
-#include "TaskScheduler/TaskManager.h"
+//#include "TaskScheduler/TaskManager.h"
 #include "Handlers/ChangeUPSModeHandler.h"
+#include "TaskScheduler/Scheduler.h"

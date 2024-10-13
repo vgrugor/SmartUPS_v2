@@ -9,7 +9,7 @@
 
     class DisableInternetPowerTask : public Task {
         public:
-            DisableInternetPowerTask(unsigned long taskDelay, bool unique = false);
+            DisableInternetPowerTask(unsigned long delayMs, bool isUnique = false);
             void execute() override;
             static const char* const TASK_NAME;
     };

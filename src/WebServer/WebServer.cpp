@@ -57,7 +57,7 @@ void WebServer::handleNotFound() {
 }
 
 void WebServer::successResponse() {
-    Serial.print("WebServer::successResponse()");
+    Serial.println("WebServer::successResponse()");
     Settings& settings = Settings::getInstance();
 
     this->server.send(200, "application/json", settings.toJSON());

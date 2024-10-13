@@ -3,10 +3,10 @@
 const char* const DisableInternetPowerTask::TASK_NAME = "disable_internet_power";
 
 DisableInternetPowerTask::DisableInternetPowerTask(
-    unsigned long taskDelay, 
+    unsigned long delayMs, 
     bool unique
 ) 
-    : Task(DisableInternetPowerTask::TASK_NAME, delayTime, unique)
+    : Task(DisableInternetPowerTask::TASK_NAME, delayMs, unique)
 {}
 
 void DisableInternetPowerTask::execute() {

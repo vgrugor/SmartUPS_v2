@@ -3,10 +3,10 @@
 const char* const DisableLightPowerTask::TASK_NAME = "disable_light_power";
 
 DisableLightPowerTask::DisableLightPowerTask(
-    unsigned long taskDelay, 
+    unsigned long delayMs, 
     bool unique
 ) 
-    : Task(DisableLightPowerTask::TASK_NAME, delayTime, unique)
+    : Task(DisableLightPowerTask::TASK_NAME, delayMs, unique)
 {}
 
 void DisableLightPowerTask::execute() {

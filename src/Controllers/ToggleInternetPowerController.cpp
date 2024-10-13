@@ -8,7 +8,7 @@ void ToggleInternetPowerController::invoke() {
 
     Settings& settings = Settings::getInstance();
     WifiManager& wifiManager = WifiManager::getInstance();
-    TaskManager& taskManager = TaskManager::getInstance();
+    Scheduler& scheduler = Scheduler::getInstance();
 
     if (settings.isOnMediaConverterPower) {
         mediaConverterPowerPin.turnOff();
@@ -21,11 +21,7 @@ void ToggleInternetPowerController::invoke() {
 
         wifiManager.connect();
 
-        int taskIndex = taskManager.findTaskByName(DisableInternetPowerTask::TASK_NAME);
-
-        if (taskIndex != -1) {
-            taskManager.removeTask(taskIndex);
-        }
+        scheduler.removeTask(DisableInternetPowerTask::TASK_NAME);
     } else {
         mediaConverterPowerPin.turnOn();
         routerPowerPin.turnOn();
@@ -43,8 +39,12 @@ void ToggleInternetPowerController::invoke() {
             !settings.isMainPower
             && TimeService::timeInInterval(settings.startNightHourInterval, settings.endNightHourInterval, powerOffTime)
         ) {
+            Serial.println("Create task");
             DisableInternetPowerTask disableInternetPowerTask(60 * 60 * 1000, true);
-            taskManager.addTask(&disableInternetPowerTask);
+            Serial.println("Task created");
+            Serial.println("Start add task");
+            scheduler.addTask(&disableInternetPowerTask);
+            Serial.println("Task added");
         }
     }
 }

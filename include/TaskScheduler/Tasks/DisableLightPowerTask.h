@@ -8,7 +8,7 @@
 
     class DisableLightPowerTask : public Task {
         public:
-            DisableLightPowerTask(unsigned long taskDelay, bool unique = false);
+            DisableLightPowerTask(unsigned long delayMs, bool unique = false);
             void execute() override;
             static const char* const TASK_NAME;
     };
