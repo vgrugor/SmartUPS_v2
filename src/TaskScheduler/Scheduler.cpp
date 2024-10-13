@@ -16,10 +16,13 @@ Scheduler& Scheduler::getInstance() {
 }
 
 void Scheduler::addTask(Task* task) {
+    Serial.println("Start get task name ");
     String name = task->getName();
+    Serial.println("Name getted " + task->getName());
 
-    Serial.println(task->getName());
-/*
+    Serial.print("Free heap: ");
+    Serial.println(ESP.getFreeHeap());
+
     if (task->isUnique()) {
         auto it = this->tasks.find(name);
 
@@ -28,8 +31,10 @@ void Scheduler::addTask(Task* task) {
             this->tasks.erase(it);
         }
     }
-*/
+
     this->tasks[name] = task;
+
+    Serial.println("Task added: " + task->getName());
 }
 
 void Scheduler::removeTask(const String& taskName) {

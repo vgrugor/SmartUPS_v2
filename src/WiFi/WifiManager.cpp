@@ -25,20 +25,24 @@ WifiManager& WifiManager::getInstance() {
     return instance;
 }
 
-void WifiManager::connect() {
-    if (this->settings.isOnMediaConverterPower) {
-        this->wifiClient.connect();
-    } else {
-        this->accessPoint.start();
-    }
+void WifiManager::disconnectClient() {
+    this->wifiClient.disconnect();
+    Serial.println("Client disabled");
 }
 
-void WifiManager::disconnect() {
-    if (this->settings.isOnMediaConverterPower) {
-        this->wifiClient.disconnect();
-    } else {
-        this->accessPoint.stop();
-    }
+void WifiManager::disableAP() {
+    this->accessPoint.stop();
+    Serial.println("AP disabled");
+}
+
+void WifiManager::connectClient() {
+    this->wifiClient.connect();
+    Serial.println("Client connected");
+}
+
+void WifiManager::enableAP() {
+    this->accessPoint.start();
+    Serial.println("AP started");
 }
 
 void WifiManager::handle() {

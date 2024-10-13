@@ -11,9 +11,11 @@
     class WifiManager {
         public:
             static WifiManager& getInstance();
-            void connect();
-            void disconnect();
             void handle();
+            void disconnectClient();
+            void disableAP();
+            void connectClient();
+            void enableAP();
 
         private:
             WifiManager(

@@ -1,9 +1,11 @@
 #include "WebServer/WebServer.h"
 
 WebServer::WebServer(
-    LittleFSModule &littleFSModule
+    LittleFSModule &littleFSModule,
+    ToggleInternetPowerController &toggleInternetPowerController
 ) : server(80),
-    littleFSModule(littleFSModule)
+    littleFSModule(littleFSModule),
+    toggleInternetPowerController(toggleInternetPowerController)
 {}
 
 void WebServer::begin() {
@@ -22,7 +24,8 @@ void WebServer::handleClient() {
 }
 
 void WebServer::handleRoot() {
-    Serial.print("WebServer::handleRoot()");
+    Serial.println("WebServer::handleRoot()");
+
     File file = this->littleFSModule.open("/index.html", "r");
 
     if (!file) {
@@ -57,14 +60,21 @@ void WebServer::handleNotFound() {
 }
 
 void WebServer::successResponse() {
-    Serial.println("WebServer::successResponse()");
+    Serial.println("WebServer::successResponse() get settings");
     Settings& settings = Settings::getInstance();
+    Serial.println("WebServer::successResponse() setting getted");
 
+    Serial.println("start get JSON");
+    String js = settings.toJSON();
+    Serial.println("JSON getted");
+
+    Serial.println("Start send response");
     this->server.send(200, "application/json", settings.toJSON());
+    Serial.println("Response sended");
 }
 
 void WebServer::handleToggleInternetPower() {
-    ToggleInternetPowerController::invoke();
+    this->toggleInternetPowerController.execute();
 
     this->successResponse();
 }

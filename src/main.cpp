@@ -5,7 +5,17 @@ Settings& settings = Settings::getInstance();
 WifiManager& wifiManager = WifiManager::getInstance();
 Scheduler& scheduler = Scheduler::getInstance();
 LittleFSModule littleFSModule;
-WebServer webServer(littleFSModule);
+
+ToggleInternetPowerController toggleInternetPowerController(
+	settings,
+	wifiManager,
+	scheduler
+);
+
+WebServer webServer(
+	littleFSModule,
+	toggleInternetPowerController
+);
 OfflineClock offlineClock;
 ChangeUPSModeHandler changeUPSModeHandler;
 
@@ -13,7 +23,7 @@ void setup() {
 	Serial.begin(115200);
 	Serial.println("LOAD BOARD");
 	settings.begin();
-	wifiManager.connect();
+	wifiManager.connectClient();
 	littleFSModule.begin();
 	webServer.begin();
 	offlineClock.begin();

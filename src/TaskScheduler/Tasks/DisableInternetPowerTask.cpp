@@ -19,10 +19,10 @@ void DisableInternetPowerTask::execute() {
     mediaConverterPowerPin.turnOff();
     routerPowerPin.turnOff();
 
-    wifiManager.disconnect();
+    wifiManager.disconnectClient();
 
     settings.isOnMediaConverterPower = false;
     settings.isOnRouterPower = false;
 
-    wifiManager.connect();
+    wifiManager.enableAP();
 }

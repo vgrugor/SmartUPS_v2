@@ -1,50 +1,59 @@
 #include "Controllers/ToggleInternetPowerController.h"
 
-ToggleInternetPowerController::ToggleInternetPowerController() {}
+ToggleInternetPowerController::ToggleInternetPowerController(
+    Settings &settings,
+    WifiManager &wifiManager,
+    Scheduler &scheduler
+) : mediaConverterPowerPin(DigitalOutputPin(MEDIA_CONVERTER_POWER_CONTROL_PIN)),
+    routerPowerPin(DigitalOutputPin(ROUTER_POWER_CONTROL_PIN)),
+    settings(settings),
+    wifiManager(wifiManager),
+    scheduler(scheduler)
+{}
 
-void ToggleInternetPowerController::invoke() {
-    DigitalOutputPin mediaConverterPowerPin(MEDIA_CONVERTER_POWER_CONTROL_PIN);
-    DigitalOutputPin routerPowerPin(ROUTER_POWER_CONTROL_PIN);
+void ToggleInternetPowerController::execute() {
+    if (this->settings.isOnMediaConverterPower) {
+        this->mediaConverterPowerPin.turnOff();
+        this->routerPowerPin.turnOff();
 
-    Settings& settings = Settings::getInstance();
-    WifiManager& wifiManager = WifiManager::getInstance();
-    Scheduler& scheduler = Scheduler::getInstance();
+        //this->wifiManager.disconnectClient();
 
-    if (settings.isOnMediaConverterPower) {
-        mediaConverterPowerPin.turnOff();
-        routerPowerPin.turnOff();
+        this->settings.isOnMediaConverterPower = false;
+        this->settings.isOnRouterPower = false;
 
-        wifiManager.disconnect();
+        //this->wifiManager.enableAP();
 
-        settings.isOnMediaConverterPower = false;
-        settings.isOnRouterPower = false;
+        //this->scheduler.removeTask(DisableInternetPowerTask::TASK_NAME);
 
-        wifiManager.connect();
+        Serial.println("Create task class DisableClientAndEnableAPTask");
+        DisableClientAndEnableAPTask disableClientAndEnableAPTask(2 * 1000, true);
+        Serial.println("DisableClientAndEnableAPTask task class created");
 
-        scheduler.removeTask(DisableInternetPowerTask::TASK_NAME);
+        Serial.println("Add task DisableClientAndEnableAPTask to scheduler");
+        this->scheduler.addTask(&disableClientAndEnableAPTask);
+        Serial.println("DisableClientAndEnableAPTask added to scheduler");
     } else {
-        mediaConverterPowerPin.turnOn();
-        routerPowerPin.turnOn();
+        this->mediaConverterPowerPin.turnOn();
+        this->routerPowerPin.turnOn();
 
-        wifiManager.disconnect();
+        //this->wifiManager.disableAP();
 
-        settings.isOnMediaConverterPower = true;
-        settings.isOnRouterPower = true;
+        this->settings.isOnMediaConverterPower = true;
+        this->settings.isOnRouterPower = true;
 
-        wifiManager.connect();
+        //this->wifiManager.connectClient();
 
         int powerOffTime = settings.hours + 1;
 
         if (
-            !settings.isMainPower
-            && TimeService::timeInInterval(settings.startNightHourInterval, settings.endNightHourInterval, powerOffTime)
+            !this->settings.isMainPower
+            && TimeService::timeInInterval(this->settings.startNightHourInterval, this->settings.endNightHourInterval, powerOffTime)
         ) {
-            Serial.println("Create task");
             DisableInternetPowerTask disableInternetPowerTask(60 * 60 * 1000, true);
-            Serial.println("Task created");
-            Serial.println("Start add task");
-            scheduler.addTask(&disableInternetPowerTask);
-            Serial.println("Task added");
+            this->scheduler.addTask(&disableInternetPowerTask);
         }
+
+        DisableAPAndEnableClientTask disableAPAndEnableClientTask(2 * 1000, true);
+        this->scheduler.addTask(&disableAPAndEnableClientTask);
     }
 }

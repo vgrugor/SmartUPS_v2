@@ -12,7 +12,8 @@
     class WebServer {
         public:
             WebServer(
-                LittleFSModule &littleFSModule
+                LittleFSModule &littleFSModule,
+                ToggleInternetPowerController &toggleInternetPowerController
             );
             void begin();
             void handleClient();
@@ -28,6 +29,7 @@
             void getStatus();
             ESP8266WebServer server;
             LittleFSModule &littleFSModule;
+            ToggleInternetPowerController &toggleInternetPowerController;
     };
 
 #endif

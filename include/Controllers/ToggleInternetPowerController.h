@@ -8,11 +8,24 @@
     #include "utils/TimeService.h"
     #include "TaskScheduler/Scheduler.h"
     #include "TaskScheduler/Tasks/DisableInternetPowerTask.h"
+    #include "TaskScheduler/Tasks/DisableAPAndEnableClientTask.h"
+    #include "TaskScheduler/Tasks/DisableClientAndEnableAPTask.h"
 
     class ToggleInternetPowerController {
         public:
-            ToggleInternetPowerController();
-            static void invoke();
+            ToggleInternetPowerController(
+                Settings &settings,
+                WifiManager &wifiManager,
+                Scheduler &scheduler
+            );
+            void execute();
+
+        private:
+            DigitalOutputPin mediaConverterPowerPin;
+            DigitalOutputPin routerPowerPin;
+            Settings &settings;
+            WifiManager &wifiManager;
+            Scheduler &scheduler;
     };
 
 #endif
